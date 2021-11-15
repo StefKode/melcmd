@@ -36,20 +36,22 @@ if not api.login():
     exit()
 
 print("UPDATE DEVICE DETAILS")
-building.update(api.get_building())
-print("BuildingID = %d" % building.ID())
+building.update(api.building)
+print("BuildingID = %d" % building.ID)
 
 devices = {}
-for dev_id in building.get_device_ids():
-    data = api.get_device(building.ID(), dev_id)
+for dev_id in building.device_ids:
+    data = api.get_device(building.ID, dev_id)
     name = building.id_to_name(dev_id)
-    dev = MelDevice(data, dev_id, name)
+    dev = MelDevice(data, dev_id, name, set_update=api.set_device)
     devices[name] = dev
-    print("DeviceName = " + dev.Name())
-    print("    ID     = " + str(dev.ID()))
-    print("    Power  = " + str(dev.isPower()))
+    print("DeviceName = " + dev.Name)
+    print("    ID     = %d" % dev.ID)
+    print("    Power  = %s" % str(dev.Power))
 
 print("STOP WZ AC(whatever mode)")
 dev = devices['Wohnzimmer']
-dev.set_power_state(False)
-api.set_device(dev.to_dict())
+# this triggers the action
+dev.Power = False
+
+print("DONE")

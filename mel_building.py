@@ -30,10 +30,12 @@ class MelBuilding:
         self._building_status = status
         self._building_id = self._building_status[0]['ID']
 
+    @property
     def ID(self):
         return self._building_id
 
-    def get_device_ids(self):
+    @property
+    def device_ids(self):
         for e in self._building_status:
             for d in e['Structure']['Devices']:
                 yield d['DeviceID']

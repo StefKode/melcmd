@@ -8,6 +8,7 @@ class MelAPI:
     context_key = None
     LOG_INFO = 0
     LOG_ERR = 1
+    cached_building = None
 
     def __init__(self, username, password):
         self.username = username
@@ -23,7 +24,7 @@ class MelAPI:
         login += '"Persist":false,"CaptchaResponse":null}'
         self.log.print("start login")
         response = Web.post_jsn(url=self.urls.login,
-                                headers=self.headers.get(),
+                                headers=self.headers.all,
                                 data=login)
         if response is None:
             self.context_key = None
@@ -35,12 +36,14 @@ class MelAPI:
         self.headers.delete('content-type')
         return True
 
-    def get_building(self):
-        if self.context_key is None:
-            return False
-        response = Web.get_jsn(self.urls.list_devices,
-                               headers=self.headers.get())
-        return response
+    @property
+    def building(self):
+        if self.cached_building is None:
+            if self.context_key is None:
+                return False
+            self.cached_building = Web.get_jsn(self.urls.list_devices,
+                                               headers=self.headers.all)
+        return self.cached_building
 
     def get_device(self, bld_id, dev_id):
         self.log.print("get_device bld_id=%d dev_id=%d" % (bld_id, dev_id))
@@ -48,13 +51,13 @@ class MelAPI:
                                        bld=bld_id)
 
         self.log.print("update_device url=%s" % url_cmd)
-        response = Web.get_jsn(url_cmd, headers=self.headers.get())
+        response = Web.get_jsn(url_cmd, headers=self.headers.all)
         self.log.print("update_device resp=%s" % str(response))
 
         return response
 
     def set_device(self, status):
         response = Web.post_jsn(self.urls.set_dev,
-                                headers=self.headers.get(),
+                                headers=self.headers.all,
                                 data=status)
         return response

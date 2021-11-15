@@ -17,10 +17,19 @@
 #######################################################################################
 
 class Urls:
-    login = "https://app.melcloud.com/Mitsubishi.Wifi.Client/Login/ClientLogin"
-    list_devices = "https://app.melcloud.com/Mitsubishi.Wifi.Client/User/ListDevices"
     _dev_status = "https://app.melcloud.com/Mitsubishi.Wifi.Client/Device/Get?"
-    set_dev = "https://app.melcloud.com/Mitsubishi.Wifi.Client/Device/SetAta"
+
+    @property
+    def login(self):
+        return "https://app.melcloud.com/Mitsubishi.Wifi.Client/Login/ClientLogin"
+
+    @property
+    def list_devices(self):
+        return "https://app.melcloud.com/Mitsubishi.Wifi.Client/User/ListDevices"
+
+    @property
+    def set_dev(self):
+        return "https://app.melcloud.com/Mitsubishi.Wifi.Client/Device/SetAta"
 
     def dev_status(self, bld, dev):
         return self._dev_status + "id=%d&buildingID=%d" % (dev, bld)

@@ -33,7 +33,8 @@ class Headers:
         "referer": "https://app.melcloud.com/",
         "accept-language": "en-US,en;q=0.9"}
 
-    def get(self):
+    @property
+    def all(self):
         return self._headers
 
     def delete(self, key):
