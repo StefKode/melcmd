@@ -21,6 +21,7 @@ from mel_building import MelBuilding
 from mel_device import MelDevice
 import json
 import log
+import time
 
 log.trace_enable = False
 
@@ -43,15 +44,26 @@ devices = {}
 for dev_id in building.device_ids:
     data = api.get_device(building.ID, dev_id)
     name = building.id_to_name(dev_id)
-    dev = MelDevice(data, dev_id, name, set_update=api.set_device)
+    dev = MelDevice(data, dev_id, name)
     devices[name] = dev
     print("DeviceName = " + dev.Name)
     print("    ID     = %d" % dev.ID)
     print("    Power  = %s" % str(dev.Power))
 
-print("STOP WZ AC(whatever mode)")
-dev = devices['Wohnzimmer']
-# this triggers the action
-dev.Power = False
+print("TEST")
+wohnzimmer = devices['Wohnzimmer']
+studio = devices['Studio']
+
+print("STOP wz")
+wohnzimmer.Power = False
+api.apply(wohnzimmer)
+
+print("WAIT 30min")
+time.sleep(5)
+print(api.login())
+
+print("STOP again wz")
+wohnzimmer.Power = False
+api.apply(wohnzimmer)
 
 print("DONE")

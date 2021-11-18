@@ -18,23 +18,22 @@
 from log import Log
 
 class MelDevice():
-    def __init__(self, data, id, name, set_update):
+    def __init__(self, data, id, name):
         self._data = data
         self._id = id
         self._name = name
-        self._set_update = set_update
         self.log = Log("MelDev(%d)" % id)
 
     @property
-    def ID(self):
+    def ID(self) -> int:
         return self._id
 
     @property
-    def Name(self):
+    def Name(self) -> str:
         return self._name
 
     @property
-    def Power(self):
+    def Power(self) -> bool:
         return self._data['Power']
 
     @Power.setter
@@ -42,5 +41,7 @@ class MelDevice():
         self._data['Power'] = state
         self._data['EffectiveFlags'] = 1
         self._data['HasPendingCommand'] = True
-        self._set_update(self._data)
 
+    @property
+    def Dict(self) -> dict:
+        return self._data

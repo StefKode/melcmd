@@ -38,7 +38,8 @@ class Headers:
         return self._headers
 
     def delete(self, key):
-        del self._headers[key]
+        if key in self._headers:
+            del self._headers[key]
 
     def set(self, key, val):
         self._headers[key] = val
