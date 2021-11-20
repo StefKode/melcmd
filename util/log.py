@@ -15,33 +15,16 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 #######################################################################################
-from log import Log
+from util.log_base import LogBase
+trace_enable = False
 
-class MelDevice():
-    def __init__(self, data, id, name):
-        self._data = data
-        self._id = id
-        self._name = name
-        self.log = Log("MelDev(%d)" % id)
+class Log(LogBase):
+    TRACE = 0
+    ERR = 1
 
-    @property
-    def ID(self) -> int:
-        return self._id
+    def __init__(self, who:str):
+        self.who = who
 
-    @property
-    def Name(self) -> str:
-        return self._name
-
-    @property
-    def Power(self) -> bool:
-        return self._data['Power']
-
-    @Power.setter
-    def Power(self, state):
-        self._data['Power'] = state
-        self._data['EffectiveFlags'] = 1
-        self._data['HasPendingCommand'] = True
-
-    @property
-    def Dict(self) -> dict:
-        return self._data
+    def print(self, text:str, level=TRACE):
+        if level == self.ERR or trace_enable:
+            print("%-15s: %s" % (self.who, str(text)))

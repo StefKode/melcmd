@@ -16,25 +16,23 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # 
 #######################################################################################
-from mel_api import MelAPI
-from mel_building import MelBuilding
-from mel_device import MelDevice
 import json
-import log
+from util import log
 import time
+from factory.factory_mel import MelFactory
 
 log.trace_enable = False
 
 with open("config.json") as f:
     config = json.loads(f.read())
 
-building = MelBuilding()
-api = MelAPI(username=config['email'],
-             password=config['password'])
+factory = MelFactory()
 
-print("LOGIN")
-if not api.login():
-    exit()
+building = factory.make_building()
+api = factory.make_api(username=config['email'],
+                       password=config['password'])
+
+print("USE IMPLICIT LOGIN")
 
 print("UPDATE DEVICE DETAILS")
 building.update(api.building)
@@ -44,7 +42,7 @@ devices = {}
 for dev_id in building.device_ids:
     data = api.get_device(building.ID, dev_id)
     name = building.id_to_name(dev_id)
-    dev = MelDevice(data, dev_id, name)
+    dev = factory.make_device(data, dev_id, name)
     devices[name] = dev
     print("DeviceName = " + dev.Name)
     print("    ID     = %d" % dev.ID)
@@ -60,7 +58,7 @@ api.apply(wohnzimmer)
 
 print("WAIT 30min")
 time.sleep(5)
-print(api.login())
+api.headers.set("x-mitscontextkey", "1")
 
 print("STOP again wz")
 wohnzimmer.Power = False

@@ -13,23 +13,39 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
-# 
+#
 #######################################################################################
+from util.log import Log
+from factory.factory_base import MelBaseFactory
+from mel_device_base import MelDeviceBase
 
-class Urls:
-    _dev_status = "https://app.melcloud.com/Mitsubishi.Wifi.Client/Device/Get?"
+
+class MelDevice(MelDeviceBase):
+    def __init__(self, fac:MelBaseFactory, data:dict, id:int, name:str):
+        self.factory = fac
+        self._data = data
+        self._id = id
+        self._name = name
+        self.log = self.factory.make_log("MelDev(%d)" % id)
 
     @property
-    def login(self):
-        return "https://app.melcloud.com/Mitsubishi.Wifi.Client/Login/ClientLogin"
+    def ID(self) -> int:
+        return self._id
 
     @property
-    def list_devices(self):
-        return "https://app.melcloud.com/Mitsubishi.Wifi.Client/User/ListDevices"
+    def Name(self) -> str:
+        return self._name
 
     @property
-    def set_dev(self):
-        return "https://app.melcloud.com/Mitsubishi.Wifi.Client/Device/SetAta"
+    def Power(self) -> bool:
+        return self._data['Power']
 
-    def dev_status(self, bld, dev):
-        return self._dev_status + "id=%d&buildingID=%d" % (dev, bld)
+    @Power.setter
+    def Power(self, state):
+        self._data['Power'] = state
+        self._data['EffectiveFlags'] = 1
+        self._data['HasPendingCommand'] = True
+
+    @property
+    def Dict(self) -> dict:
+        return self._data
