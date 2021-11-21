@@ -16,25 +16,19 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # 
 #######################################################################################
-from mel_api import MelAPI
-from mel_building import MelBuilding
-from mel_device import MelDevice
-import json
-import log
-import time
+from factory.default import DefaultFactory
+from config.config import Config
 
+from util import log
 log.trace_enable = False
 
-with open("config.json") as f:
-    config = json.loads(f.read())
+config = Config("config.json")
+make = DefaultFactory()
+building = make.MelBuilding()
+api = make.MelAPI(username=config.username,
+                  password=config.password)
 
-building = MelBuilding()
-api = MelAPI(username=config['email'],
-             password=config['password'])
-
-print("LOGIN")
-if not api.login():
-    exit()
+print("USE IMPLICIT LOGIN")
 
 print("UPDATE DEVICE DETAILS")
 building.update(api.building)
@@ -44,7 +38,7 @@ devices = {}
 for dev_id in building.device_ids:
     data = api.get_device(building.ID, dev_id)
     name = building.id_to_name(dev_id)
-    dev = MelDevice(data, dev_id, name)
+    dev = make.MelDevice(fac=make, bld_id=building.ID, data=data, id=dev_id, name=name)
     devices[name] = dev
     print("DeviceName = " + dev.Name)
     print("    ID     = %d" % dev.ID)
@@ -54,16 +48,11 @@ print("TEST")
 wohnzimmer = devices['Wohnzimmer']
 studio = devices['Studio']
 
-print("STOP wz")
 wohnzimmer.Power = False
 api.apply(wohnzimmer)
 
-print("WAIT 30min")
-time.sleep(5)
-print(api.login())
-
-print("STOP again wz")
-wohnzimmer.Power = False
-api.apply(wohnzimmer)
-
-print("DONE")
+import time
+while True:
+    print(wohnzimmer.RoomTemperature)
+    time.sleep(30)
+    api.udpate(wohnzimmer)

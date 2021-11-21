@@ -15,15 +15,11 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 #######################################################################################
-trace_enable = False
+from abc import abstractmethod
 
-class Log:
-    TRACE = 0
-    ERR = 1
 
-    def __init__(self, who):
-        self.who = who
+class MelAPIBase:
 
-    def print(self, text, level=TRACE):
-        if level == self.ERR or trace_enable:
-            print("%-15s: %s" % (self.who, str(text)))
+    @abstractmethod
+    def __init__(self, *args):
+        pass

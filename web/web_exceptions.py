@@ -15,36 +15,28 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 #######################################################################################
-from log import Log
 
 
-class MelBuilding:
-    _building_id = None
-    _building_status = {}
-
-    def __init__(self):
-        self.log = Log("MelBuilding")
-
-    def update(self, status):
-        self.log.print("update_building %s" % str(status))
-        self._building_status = status
-        self._building_id = self._building_status[0]['ID']
-
-    @property
-    def ID(self):
-        return self._building_id
-
-    @property
-    def device_ids(self):
-        for e in self._building_status:
-            for d in e['Structure']['Devices']:
-                yield d['DeviceID']
-
-    def id_to_name(self, id):
-        for e in self._building_status:
-            for d in e['Structure']['Devices']:
-                if d['DeviceID'] == id:
-                    return d['DeviceName']
-        return None
+class WebExceptionAuth(Exception):
+    """Custom HTTP authentication exception"""
+    pass
 
 
+class WebExceptionConnection(Exception):
+    """Custom HTTP connection error exception"""
+    pass
+
+
+class WebExceptionNotFound(Exception):
+    """Custom HTTP resource not found exception"""
+    pass
+
+
+class WebExceptionMisc(Exception):
+    """Custom HTTP unknown error exception"""
+    pass
+
+
+class WebException_JsnDecode(Exception):
+    """Custom HTTP response Json decoder error exception"""
+    pass
