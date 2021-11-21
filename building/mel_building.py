@@ -15,8 +15,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 #######################################################################################
-from util.log import Log
-from factory.factory_base import MelBaseFactory
+from factory.base import MelCmdFactory
 from building.mel_building_base import MelBuildingBase
 
 
@@ -24,7 +23,7 @@ class MelBuilding(MelBuildingBase):
     _building_id = None
     _building_status = {}
 
-    def __init__(self, fac:MelBaseFactory):
+    def __init__(self, fac:MelCmdFactory):
         self._make = fac
         self._log = self._make.Log("MelBuilding")
 

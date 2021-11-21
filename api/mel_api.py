@@ -16,7 +16,7 @@
 #
 #######################################################################################
 from api.mel_api_base import MelAPIBase
-from factory.factory_base import MelBaseFactory
+from factory.base import MelCmdFactory
 from web.web_transport import WebTransport as Web
 import web.web_exceptions as WebErr
 from api import mel_api_exceptions as ApiErr
@@ -30,7 +30,7 @@ class MelAPI(MelAPIBase):
     _context_key = None
     _cached_building = None
 
-    def __init__(self, fac:MelBaseFactory, username:str, password:str):
+    def __init__(self, fac:MelCmdFactory, username:str, password:str):
         """
         Constructor of API object. The login credentials cannot be updated after creation.
         :param username: username string
@@ -155,7 +155,7 @@ class MelAPI(MelAPIBase):
         response = self._web_cmd_get(url_cmd)
         return response
 
-    def apply(self, obj) -> dict:
+    def apply(self, obj) -> None:
         """
         Sends the provided object to MelCloud for update. Once the object has been recieved
         by MelCloud, the current object is sent back as a response.
@@ -163,5 +163,23 @@ class MelAPI(MelAPIBase):
         :return: response object as dic
         """
         if isinstance(obj, MelDevice):
-            return self._web_cmd_post(self._urls.set_dev, obj.Dict)
+            current_devstate = self._web_cmd_post(self._urls.set_dev, obj.Dict)
+            # update the device state
+            obj.Dict = current_devstate
+            return
+        raise ValueError("unsupported type to apply")
+
+    def udpate(self, obj) -> None:
+        """
+        Updates the specified object from MelCloud. The stored state in obj is completely
+        overwritten.
+        :param obj: object to update, only MelDevice allowed currently
+        :return: response object as dic
+        """
+        if isinstance(obj, MelDevice):
+            url_cmd = self._urls.dev_status(dev=obj.ID, bld=obj.BuildingID)
+            current = self._web_cmd_get(url_cmd)
+            # update the device state
+            obj.Dict = current
+            return
         raise ValueError("unsupported type to apply")

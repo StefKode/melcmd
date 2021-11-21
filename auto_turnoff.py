@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 #
 # This file is part of the melcmd distribution (https://github.com/StefKode/melcmd).
 # Copyright (c) 2021 Stefan Koch
@@ -14,25 +13,19 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
-# 
+#
 #######################################################################################
-import json
-from util import log
+from factory.default import DefaultFactory
+from config.config import Config
+from datetime import datetime
 import time
-from factory.factory_mel import MelFactory
 
-log.trace_enable = False
+RUNTIME_SEC=30*60
 
-with open("config.json") as f:
-    config = json.loads(f.read())
-
-make = MelFactory()
-
+config = Config("config.json")
+make = DefaultFactory()
 building = make.MelBuilding()
-api = make.MelAPI(username=config['email'],
-                       password=config['password'])
-
-print("USE IMPLICIT LOGIN")
+api = make.MelAPI(username=config.username, password=config.password)
 
 print("UPDATE DEVICE DETAILS")
 building.update(api.building)
@@ -42,26 +35,38 @@ devices = {}
 for dev_id in building.device_ids:
     data = api.get_device(building.ID, dev_id)
     name = building.id_to_name(dev_id)
-    dev = make.MelDevice(data, dev_id, name)
+    dev = make.MelDevice(fac=make, bld_id=building.ID, data=data, id=dev_id, name=name)
     devices[name] = dev
     print("DeviceName = " + dev.Name)
-    print("    ID     = %d" % dev.ID)
     print("    Power  = %s" % str(dev.Power))
 
-print("TEST")
-wohnzimmer = devices['Wohnzimmer']
-studio = devices['Studio']
+print("MONITOR DEVICES")
+while True:
+    for devname in devices:
+        dev = devices[devname]
+        api.udpate(dev)
+        print("%-15s = %s" % (dev.Name, str(dev.Power)))
+        #print(dev.Dict)
 
-print("STOP wz")
-wohnzimmer.Power = False
-api.apply(wohnzimmer)
+        if not dev.Power:
+            dev.last_power = False
+            continue
 
-print("WAIT 30min")
-time.sleep(5)
-api._headers.set("x-mitscontextkey", "1")
+        if dev.Power and not dev.last_power:
+            print("%-15s: turned on" % devname)
+            dev.last_ts = datetime.now()
+            dev.last_power = dev.Power
+            continue
 
-print("STOP again wz")
-wohnzimmer.Power = False
-api.apply(wohnzimmer)
+        if dev.Power and dev.last_power:
+            duration = (datetime.now() - dev.last_ts).total_seconds()
+            print(duration)
+            if duration > RUNTIME_SEC:
+                dev.Power = False
+                api.apply(dev)
+                dev.last_power = False
+            continue
 
-print("DONE")
+        print("BUG")
+    time.sleep(60)
+
