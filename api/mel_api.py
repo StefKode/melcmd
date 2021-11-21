@@ -118,7 +118,7 @@ class MelAPI(MelAPIBase):
 
         # received a 401 error, we need to re-authenticate to update
         # the context key
-        self._log.print("Re-Login", Log.ERR)
+        self._log.print("(Re-)Login")
         if not self._login():
             # failure of re-login cannot be recovered
             raise ApiErr.APIExceptionCommError
