@@ -17,12 +17,10 @@
 #######################################################################################
 from api.mel_api_base import MelAPIBase
 from factory.base import MelCmdFactory
-from web.web_transport import WebTransport as Web
 import web.web_exceptions as WebErr
 from api import mel_api_exceptions as ApiErr
 from api.html_headers import Headers
 from device.mel_device import MelDevice
-from util.log import Log
 
 
 class MelAPI(MelAPIBase):
@@ -37,6 +35,7 @@ class MelAPI(MelAPIBase):
         :param password: password string
         """
         self._make = fac
+        self._web = self._make.WebTransport()
         self._username = username
         self._password = password
         self._headers = Headers()
@@ -60,7 +59,7 @@ class MelAPI(MelAPIBase):
         self._headers.delete('x-mitscontextkey')
         self._headers.set('content-type', "application/json; charset=UTF-8")
         try:
-            response = Web.post_jsn(url=self._urls.login,
+            response = self._web.post_jsn(url=self._urls.login,
                                     headers=self._headers.all,
                                     data=login)
         except Exception as e:
@@ -81,7 +80,7 @@ class MelAPI(MelAPIBase):
         the desired Web transport method (static)
         :return: dict response from MelCloud
         """
-        return self._web_cmd(Web.post_jsn, url, self._headers.all, data)
+        return self._web_cmd(self._web.post_jsn, url, self._headers.all, data)
 
     def _web_cmd_get(self, url:str) -> dict:
         """
@@ -91,7 +90,7 @@ class MelAPI(MelAPIBase):
         :param url: URL to access
         :return: dict response from MelCloud
         """
-        return self._web_cmd(Web.get_jsn, url, self._headers.all)
+        return self._web_cmd(self._web.get_jsn, url, self._headers.all)
 
     def _web_cmd(self, webfunc, url, headers, data=None):
         """
