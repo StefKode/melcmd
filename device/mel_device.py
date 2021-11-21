@@ -21,11 +21,11 @@ from device.mel_device_base import MelDeviceBase
 
 class MelDevice(MelDeviceBase):
     def __init__(self, fac:MelBaseFactory, data:dict, id:int, name:str):
-        self.make = fac
+        self._make = fac
         self._data = data
         self._id = id
         self._name = name
-        self.log = self.make.Log("MelDev(%d)" % id)
+        self._log = self._make.Log("MelDev(%d)" % id)
 
     @property
     def ID(self) -> int:

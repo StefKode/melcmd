@@ -25,11 +25,11 @@ class MelBuilding(MelBuildingBase):
     _building_status = {}
 
     def __init__(self, fac:MelBaseFactory):
-        self.make = fac
-        self.log = self.make.Log("MelBuilding")
+        self._make = fac
+        self._log = self._make.Log("MelBuilding")
 
     def update(self, status):
-        self.log.print("update_building %s" % str(status))
+        self._log.print("update_building %s" % str(status))
         self._building_status = status
         self._building_id = self._building_status[0]['ID']
 

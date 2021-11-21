@@ -23,8 +23,8 @@ class Log(LogBase):
     ERR = 1
 
     def __init__(self, who:str):
-        self.who = who
+        self._who = who
 
     def print(self, text:str, level=TRACE):
         if level == self.ERR or trace_enable:
-            print("%-15s: %s" % (self.who, str(text)))
+            print("%-15s: %s" % (self._who, str(text)))

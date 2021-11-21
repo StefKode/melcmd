@@ -58,7 +58,7 @@ api.apply(wohnzimmer)
 
 print("WAIT 30min")
 time.sleep(5)
-api.headers.set("x-mitscontextkey", "1")
+api._headers.set("x-mitscontextkey", "1")
 
 print("STOP again wz")
 wohnzimmer.Power = False

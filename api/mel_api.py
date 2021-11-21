@@ -36,12 +36,12 @@ class MelAPI(MelAPIBase):
         :param username: username string
         :param password: password string
         """
-        self.make = fac
-        self.username = username
-        self.password = password
-        self.headers = Headers()
-        self.urls = self.make.Urls()
-        self.log = self.make.Log("MelAPI")
+        self._make = fac
+        self._username = username
+        self._password = password
+        self._headers = Headers()
+        self._urls = self._make.Urls()
+        self._log = self._make.Log("MelAPI")
 
     def _login(self) -> bool:
         """
@@ -52,16 +52,16 @@ class MelAPI(MelAPIBase):
         if such an exception is
         :return: True if login was successful, False if otherwise.
         """
-        login = '{"Email":"%s"' % self.username
-        login += ',"Password":"%s"' % self.password
+        login = '{"Email":"%s"' % self._username
+        login += ',"Password":"%s"' % self._password
         login += ',"Language":4,"AppVersion":"1.22.8.0",'
         login += '"Persist":false,"CaptchaResponse":null}'
-        self.log.print("start login")
-        self.headers.delete('x-mitscontextkey')
-        self.headers.set('content-type', "application/json; charset=UTF-8")
+        self._log.print("start login")
+        self._headers.delete('x-mitscontextkey')
+        self._headers.set('content-type', "application/json; charset=UTF-8")
         try:
-            response = Web.post_jsn(url=self.urls.login,
-                                    headers=self.headers.all,
+            response = Web.post_jsn(url=self._urls.login,
+                                    headers=self._headers.all,
                                     data=login)
         except Exception as e:
             print(e)
@@ -69,9 +69,9 @@ class MelAPI(MelAPIBase):
             return False
 
         self._context_key = response['LoginData']['ContextKey']
-        self.log.print("ContextKey = " + str(self._context_key))
-        self.headers.set('x-mitscontextkey', self._context_key)
-        self.headers.delete('content-type')
+        self._log.print("ContextKey = " + str(self._context_key))
+        self._headers.set('x-mitscontextkey', self._context_key)
+        self._headers.delete('content-type')
         return True
 
     def _web_cmd_post(self, url:str, data:dict):
@@ -81,7 +81,7 @@ class MelAPI(MelAPIBase):
         the desired Web transport method (static)
         :return: dict response from MelCloud
         """
-        return self._web_cmd(Web.post_jsn, url, self.headers.all, data)
+        return self._web_cmd(Web.post_jsn, url, self._headers.all, data)
 
     def _web_cmd_get(self, url:str) -> dict:
         """
@@ -91,7 +91,7 @@ class MelAPI(MelAPIBase):
         :param url: URL to access
         :return: dict response from MelCloud
         """
-        return self._web_cmd(Web.get_jsn, url, self.headers.all)
+        return self._web_cmd(Web.get_jsn, url, self._headers.all)
 
     def _web_cmd(self, webfunc, url, headers, data=None):
         """
@@ -118,7 +118,7 @@ class MelAPI(MelAPIBase):
 
         # received a 401 error, we need to re-authenticate to update
         # the context key
-        self.log.print("Re-Login", Log.ERR)
+        self._log.print("Re-Login", Log.ERR)
         if not self._login():
             # failure of re-login cannot be recovered
             raise ApiErr.APIExceptionCommError
@@ -140,7 +140,7 @@ class MelAPI(MelAPIBase):
         :return: cached or fetched building dict from MelCloud
         """
         if self._cached_building is None:
-            self._cached_building = self._web_cmd_get(self.urls.list_devices)
+            self._cached_building = self._web_cmd_get(self._urls.list_devices)
         return self._cached_building
 
     def get_device(self, bld_id:int, dev_id:int) -> dict:
@@ -150,8 +150,8 @@ class MelAPI(MelAPIBase):
         :param dev_id: device id
         :return: device dict from MelCloud
         """
-        self.log.print("get_device bld_id=%d dev_id=%d" % (bld_id, dev_id))
-        url_cmd = self.urls.dev_status(dev=dev_id, bld=bld_id)
+        self._log.print("get_device bld_id=%d dev_id=%d" % (bld_id, dev_id))
+        url_cmd = self._urls.dev_status(dev=dev_id, bld=bld_id)
         response = self._web_cmd_get(url_cmd)
         return response
 
@@ -163,5 +163,5 @@ class MelAPI(MelAPIBase):
         :return: response object as dic
         """
         if isinstance(obj, MelDevice):
-            return self._web_cmd_post(self.urls.set_dev, obj.Dict)
+            return self._web_cmd_post(self._urls.set_dev, obj.Dict)
         raise ValueError("unsupported type to apply")
