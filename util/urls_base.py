@@ -15,39 +15,8 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # 
 #######################################################################################
-from abc import abstractmethod
 
 
 class UrlsBase:
-    @abstractmethod
-    @property
-    def login(self) -> str:
-        """
-        Provides login URL
-        :return: login url string
-        """
+    pass
 
-    @abstractmethod
-    @property
-    def list_devices(self) -> str:
-        """
-        Provides url to list all devices (get building dict)
-        :return: building url string
-        """
-
-    @abstractmethod
-    @property
-    def set_dev(self) -> str:
-        """
-        Provides url to update a device in MelCloud
-        :return: device update url string
-        """
-
-    @abstractmethod
-    def dev_status(self, bld:int, dev:int) -> str:
-        """
-        Provides custom url to fetch device status with encoded building and device id
-        :param bld: building id
-        :param dev: device id
-        :return: device url string
-        """

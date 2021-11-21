@@ -15,18 +15,17 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 #######################################################################################
-from util.log import Log
 from factory.factory_base import MelBaseFactory
-from mel_device_base import MelDeviceBase
+from device.mel_device_base import MelDeviceBase
 
 
 class MelDevice(MelDeviceBase):
     def __init__(self, fac:MelBaseFactory, data:dict, id:int, name:str):
-        self.factory = fac
+        self.make = fac
         self._data = data
         self._id = id
         self._name = name
-        self.log = self.factory.make_log("MelDev(%d)" % id)
+        self.log = self.make.Log("MelDev(%d)" % id)
 
     @property
     def ID(self) -> int:

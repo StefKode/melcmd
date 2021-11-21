@@ -25,8 +25,8 @@ class MelBuilding(MelBuildingBase):
     _building_status = {}
 
     def __init__(self, fac:MelBaseFactory):
-        self.factory = fac
-        self.log = self.factory.make_log("MelBuilding")
+        self.make = fac
+        self.log = self.make.Log("MelBuilding")
 
     def update(self, status):
         self.log.print("update_building %s" % str(status))

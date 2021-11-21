@@ -18,11 +18,10 @@
 from api.mel_api_base import MelAPIBase
 from factory.factory_base import MelBaseFactory
 from web.web_transport import WebTransport as Web
-from web import web_exceptions as WebErr
+import web.web_exceptions as WebErr
 from api import mel_api_exceptions as ApiErr
-from html_headers import Headers
+from api.html_headers import Headers
 from device.mel_device import MelDevice
-from util.urls import Urls
 from util.log import Log
 
 
@@ -37,12 +36,12 @@ class MelAPI(MelAPIBase):
         :param username: username string
         :param password: password string
         """
-        self.factory = fac
+        self.make = fac
         self.username = username
         self.password = password
         self.headers = Headers()
-        self.urls = self.factory.make_url()
-        self.log = self.factory.make_log("MelAPI")
+        self.urls = self.make.Urls()
+        self.log = self.make.Log("MelAPI")
 
     def _login(self) -> bool:
         """

@@ -18,28 +18,4 @@
 
 
 class WebTransportBase:
-    """
-    Static class which provides http post and get functions. It translates certain
-    http error codes into specific exceptions (web_exception)
-    """
-
-    @staticmethod
-    def post_jsn(url, headers: dict, data: dict) -> dict:
-        """
-        Perform HTTP POST operation. Any returned data is assumed to be Json and will be
-        converted to a dictionary. Any response other Json will return in exception.
-        :param url: URL to use
-        :param headers: header dict to use
-        :param data: data dict to use
-        :return: dict response
-        """
-
-    @staticmethod
-    def get_jsn(url, headers: dict) -> dict:
-        """
-        Perform HTTP GET operation. Any returned data is assumed to be Json and will be
-        converted to a dictionary. Any response other Json will return in exception.
-        :param url: URL to use
-        :param headers: header dict to use
-        :return: dict response
-        """
+    pass

@@ -20,14 +20,5 @@ from abc import abstractmethod
 
 class LogBase:
     @abstractmethod
-    def __init__(self, who:str):
-        """
-        :param who: name of logging source
-        """
-
-    @abstractmethod
-    def print(self, text:str, level:int) -> None:
-        """
-        :param text: text to log
-        :param level: log level
-        """
+    def __init__(self, *args):
+        pass

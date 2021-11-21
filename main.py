@@ -26,10 +26,10 @@ log.trace_enable = False
 with open("config.json") as f:
     config = json.loads(f.read())
 
-factory = MelFactory()
+make = MelFactory()
 
-building = factory.make_building()
-api = factory.make_api(username=config['email'],
+building = make.MelBuilding()
+api = make.MelAPI(username=config['email'],
                        password=config['password'])
 
 print("USE IMPLICIT LOGIN")
@@ -42,7 +42,7 @@ devices = {}
 for dev_id in building.device_ids:
     data = api.get_device(building.ID, dev_id)
     name = building.id_to_name(dev_id)
-    dev = factory.make_device(data, dev_id, name)
+    dev = make.MelDevice(data, dev_id, name)
     devices[name] = dev
     print("DeviceName = " + dev.Name)
     print("    ID     = %d" % dev.ID)

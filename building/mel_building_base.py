@@ -16,43 +16,9 @@
 #
 #######################################################################################
 from abc import abstractmethod
-from factory.factory_base import MelBaseFactory
 
 
 class MelBuildingBase:
     @abstractmethod
-    def __init__(self, fac:MelBaseFactory):
-        """
-        :param fac: factory to use
-        """
-    @abstractmethod
-    def update(self, status):
-        """
-        :param status:
-        :return:
-        """
-
-    @abstractmethod
-    @property
-    def ID(self):
-        """
-
-        :return:
-        """
-
-    @abstractmethod
-    @property
-    def device_ids(self):
-        """
-
-        :return:
-        """
-
-    @abstractmethod
-    def id_to_name(self, id):
-        """
-
-        :param id:
-        :return:
-        """
-
+    def __init__(self, *args):
+        pass

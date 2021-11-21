@@ -16,50 +16,9 @@
 #
 #######################################################################################
 from abc import abstractmethod
-from factory.factory_base import MelBaseFactory
 
 
 class MelDeviceBase():
     @abstractmethod
-    def __init__(self, fac:MelBaseFactory,data:dict, id:int, name:str):
-        """
-        :param fac: factory to use
-        :param data: dictionary with MelCloud device structure
-        :param id: id of the device
-        :param name: name of the device
-        """
-
-    @abstractmethod
-    @property
-    def ID(self) -> int:
-        """
-        :return: id of device
-        """
-
-    @abstractmethod
-    @property
-    def Name(self) -> str:
-        """
-        :return: name of device
-        """
-
-    @abstractmethod
-    @property
-    def Power(self) -> bool:
-        """
-        :return: power state of device
-        """
-
-    @abstractmethod
-    @Power.setter
-    def Power(self, state) -> None:
-        """
-        :param state: target power state of the device
-        """
-
-    @abstractmethod
-    @property
-    def Dict(self) -> dict:
-        """
-        :return: state dict of device
-        """
+    def __init__(self, *args):
+        pass
