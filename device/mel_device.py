@@ -27,7 +27,8 @@ class MelDevice(MelDeviceBase):
         self._id = id
         self._name = name
         self._log = self._make.Log("MelDev(%d)" % id)
-        self.last_power = self.Power
+        # TODO refactor out of here
+        self.last_power = False
         self.last_ts = None
 
     @property

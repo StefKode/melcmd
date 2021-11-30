@@ -43,16 +43,7 @@ for dev_id in building.device_ids:
     print("DeviceName = " + dev.Name)
     print("    ID     = %d" % dev.ID)
     print("    Power  = %s" % str(dev.Power))
+    print("   RoomTemp= %f" % dev.RoomTemperature)
+    print("    SetTemp= %f" % dev.SetTemperature)
 
-print("TEST")
-wohnzimmer = devices['Wohnzimmer']
-studio = devices['Studio']
 
-wohnzimmer.Power = False
-api.apply(wohnzimmer)
-
-import time
-while True:
-    print(wohnzimmer.RoomTemperature)
-    time.sleep(30)
-    api.udpate(wohnzimmer)

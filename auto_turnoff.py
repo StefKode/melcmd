@@ -63,6 +63,7 @@ while True:
         api.udpate(dev)
 
         if not dev.Power:
+            report("%s Room %3.1f°C" % dev.RoomTemperature)
             dev.last_power = False
             continue
 
@@ -74,8 +75,11 @@ while True:
 
         if dev.Power and dev.last_power:
             duration = (datetime.now() - dev.last_ts).total_seconds()
-            report("%s has left: %d min" % (devname, round((RUNTIME_SEC-duration)/60)))
+            report("%s (%3.1f°C) has left: %d min" % (devname, dev.RoomTemperature, round((RUNTIME_SEC-duration)/60)))
             if duration > RUNTIME_SEC:
+                if dev.RoomTemperature < dev.SetTemperature:
+                    report("%s timeout but wait for settemp to settle (%3.1f°C)" %
+                           (devname, dev.SetTemperature - dev.RoomTemperature))
                 report("%s turn OFF" % devname)
                 dev.Power = False
                 api.apply(dev)

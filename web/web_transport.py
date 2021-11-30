@@ -41,7 +41,7 @@ class WebTransport:
         try:
             r = requests.post(url, headers=headers, data=data)
         except Exception as e:
-            print(e)
+            #print(e)
             raise Error.WebExceptionConnection
 
         if r.status_code == 401:
@@ -71,7 +71,7 @@ class WebTransport:
         try:
             r = requests.get(url, headers=headers)
         except Exception as e:
-            print(e)
+            #print(e)
             raise Error.WebExceptionConnection
 
         if r.status_code == 401:
