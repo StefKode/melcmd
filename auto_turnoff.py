@@ -21,12 +21,30 @@
 # tool turns them off after approximately 30min
 #
 from factory.default import DefaultFactory
+from device.mel_device import MelDevice
 from config.config import Config
 from datetime import datetime
 import time
 
+
+##########################################################################################
+# configuration of the tracking
 RUNTIME_SEC=30*60
 CHECK_TIME_SEC=5*60
+
+
+##########################################################################################
+# Tailor classes for Tracking purpose
+class TrackingDevice(MelDevice):
+    last_ts = None
+    last_power = False
+
+
+class TrackingFactory(DefaultFactory):
+    # overwrite device maker to deliver TrackingDevice
+    def MelDevice(self, fac, bld_id:int, data:dict, id:int, name:str) -> TrackingDevice:
+        return TrackingDevice(fac=fac, bld_id=bld_id, data=data, id=id, name=name)
+
 
 
 def time_str():
@@ -38,7 +56,7 @@ def report(text):
 
 
 config = Config("config.json")
-make = DefaultFactory()
+make = TrackingFactory()
 building = make.MelBuilding()
 api = make.MelAPI(username=config.username, password=config.password)
 
@@ -63,7 +81,7 @@ while True:
         api.udpate(dev)
 
         if not dev.Power:
-            report("%s Room %3.1f°C" % dev.RoomTemperature)
+            report("%s Room %3.1f°C" % (devname, dev.RoomTemperature))
             dev.last_power = False
             continue
 
