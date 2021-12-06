@@ -15,10 +15,6 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 #######################################################################################
-import sys
-import os
-from os.path import dirname
-sys.path.append(dirname(__file__) + os.sep + "..")
 from examples.auto_turnoff.db_config import ConfigDB
 import psycopg2
 
@@ -35,7 +31,6 @@ class DbWriter:
             # connect to the PostgreSQL server
             print('Connecting to the PostgreSQL database...')
             connect_str = f"host={self._conf.host} port={self._conf.port} dbname={self._conf.db} user={self._conf.user} password={self._conf.password}"
-            print(connect_str)
             self._conn = psycopg2.connect(connect_str)
             # create a cursor
             self._cur = self._conn.cursor()#

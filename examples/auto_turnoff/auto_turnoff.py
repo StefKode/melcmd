@@ -18,7 +18,7 @@
 import sys
 import os
 from os.path import dirname
-sys.path.append(dirname(__file__) + os.sep + "..")
+sys.path.append(dirname(__file__) + os.sep + ".." + os.sep + "..")
 
 #
 # This sample application monitors all Mel Devices. If they get turned on, then this
