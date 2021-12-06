@@ -83,4 +83,4 @@ fi 2>&1 | tee -a $TRACE_LOG
 #-----------------------------------------------------------
 # App Startup
 
-./run &
+./auto_turnoff_psql.py &

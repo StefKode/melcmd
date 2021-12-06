@@ -22,23 +22,19 @@ sys.path.append(dirname(__file__) + os.sep + "..")
 
 #
 # This sample application monitors all Mel Devices. If they get turned on, then this
-# tool turns them off after approximately 30min
+# tool turns them off after approximately 30min. It also adds the readings to a databse
 #
-from config.config_mel import ConfigMel
+from config.config_mel import Config
 from device.device_mgr import DeviceManager
 from datetime import datetime
 import time
 
 from examples.auto_turnoff_factory import TrackingFactory
-from examples.db_config import ConfigDB
-from examples.db_writer import DbWriter
 
 ##########################################################################################
 # configuration of the tracking
 RUNTIME_SEC=30*60
 CHECK_TIME_SEC=5*60
-
-USE_DB=True
 
 
 ##########################################################################################
@@ -53,17 +49,11 @@ def report(text):
 
 ##########################################################################################
 # initialize objects
-config = ConfigMel("config.json")
-dbconf = ConfigDB("examples" + os.sep + "dbconf.json")
+config = Config("config.json")
+dbconf = Config("dbconf.json")
 make = TrackingFactory()
 building = make.MelBuilding()
 api = make.MelAPI(username=config.username, password=config.password)
-
-if USE_DB:
-    db = DbWriter(dbconf)
-else:
-    db = None
-
 
 ##########################################################################################
 # build device manager
@@ -72,16 +62,12 @@ building.update(api.building)
 print("BuildingID = %d" % building.ID)
 devMgr = DeviceManager(make, api, building)
 
-
 ##########################################################################################
 # Montoring
 print("MONITOR DEVICES")
-
 report("started")
 while True:
     for dev in devMgr.Devices:
         dev.evaluate(api, report)
-        if USE_DB:
-            db.publish(dev.ID, dev.Power, dev.SetTemperature, dev.RoomTemperature)
     time.sleep(CHECK_TIME_SEC)
 

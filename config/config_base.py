@@ -18,15 +18,7 @@
 import json
 
 
-class Config:
+class ConfigBase:
     def __init__(self, configfile:str):
-        with open("config.json") as f:
+        with open(configfile) as f:
             self._config = json.loads(f.read())
-
-    @property
-    def username(self):
-        return self._config['email']
-
-    @property
-    def password(self):
-        return self._config['password']

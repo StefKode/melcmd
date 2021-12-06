@@ -1,0 +1,8 @@
+{
+  "user": "<username>",
+  "password": "<password of user>",
+  "host": "<host or ip-addr>",
+  "port": <int>,
+  "db": "<dbname>",
+  "table": "<schema.table>"
+}

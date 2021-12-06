@@ -17,7 +17,7 @@
 # 
 #######################################################################################
 from factory.default import DefaultFactory
-from config.config import Config
+from config.config_mel import Config
 
 from util import log
 log.trace_enable = False
