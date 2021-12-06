@@ -1,6 +1,6 @@
 .idea
 config.json
-examples/dbconf.json
+examples/auto_turnoff/dbconf.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

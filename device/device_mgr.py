@@ -2,6 +2,7 @@ from factory.default import DefaultFactory
 from building.mel_building import MelBuilding
 from api.mel_api import MelAPI
 
+
 class DeviceManager:
     def __init__(self, make: DefaultFactory, api: MelAPI ,bld: MelBuilding):
         self._devices = {}

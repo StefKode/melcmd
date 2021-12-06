@@ -29,15 +29,16 @@ from device.device_mgr import DeviceManager
 from datetime import datetime
 import time
 
-from examples.auto_turnoff_factory import TrackingFactory
-from examples.db_config import ConfigDB
-from examples.db_writer import DbWriter
+from examples.auto_turnoff.tracking_factory import TrackingFactory
+from examples.auto_turnoff.db_config import ConfigDB
+from examples.auto_turnoff.db_writer import DbWriter
 
 ##########################################################################################
 # configuration of the tracking
 RUNTIME_SEC=30*60
 CHECK_TIME_SEC=5*60
 
+DEBUG=True
 USE_DB=True
 
 
@@ -48,13 +49,15 @@ def time_str():
 
 
 def report(text):
+    if not DEBUG:
+        return
     print(time_str() + str(text))
 
 
 ##########################################################################################
 # initialize objects
 config = ConfigMel("config.json")
-dbconf = ConfigDB("examples" + os.sep + "dbconf.json")
+dbconf = ConfigDB("examples" + os.sep + "auto_turnoff" + os.sep + "dbconf.json")
 make = TrackingFactory()
 building = make.MelBuilding()
 api = make.MelAPI(username=config.username, password=config.password)

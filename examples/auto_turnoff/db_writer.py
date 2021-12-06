@@ -19,7 +19,7 @@ import sys
 import os
 from os.path import dirname
 sys.path.append(dirname(__file__) + os.sep + "..")
-from examples.db_config import ConfigDB
+from examples.auto_turnoff.db_config import ConfigDB
 import psycopg2
 
 

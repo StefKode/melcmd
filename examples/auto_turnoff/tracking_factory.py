@@ -1,4 +1,4 @@
-from examples.auto_turnoff_tracker import TrackingDevice
+from examples.auto_turnoff.device_tracking import TrackingDevice
 from factory.default import DefaultFactory
 
 
