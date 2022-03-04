@@ -21,6 +21,7 @@ import web.web_exceptions as WebErr
 from api import mel_api_exceptions as ApiErr
 from api.html_headers import Headers
 from device.mel_device import MelDevice
+import json
 
 
 class MelAPI(MelAPIBase):
@@ -80,6 +81,7 @@ class MelAPI(MelAPIBase):
         the desired Web transport method (static)
         :return: dict response from MelCloud
         """
+        self._headers.set('content-type', "application/json; charset=UTF-8")
         return self._web_cmd(self._web.post_jsn, url, self._headers.all, data)
 
     def _web_cmd_get(self, url:str) -> dict:
@@ -90,6 +92,7 @@ class MelAPI(MelAPIBase):
         :param url: URL to access
         :return: dict response from MelCloud
         """
+        self._headers.delete('content-type')
         return self._web_cmd(self._web.get_jsn, url, self._headers.all)
 
     def _web_cmd(self, webfunc, url, headers, data=None):
@@ -102,13 +105,19 @@ class MelAPI(MelAPIBase):
         :param data: optional data, used for post actions
         :return: dict response from MelCloud
         """
+
+        if isinstance(data, dict):
+            send_data = json.dumps(data).replace("None", "null")
+        else:
+            send_data = data
+
         try:
             if self._context_key is not None:
                 # first time use
                 if data is None:
                     return webfunc(url, headers)
                 else:
-                    return webfunc(url, headers, data=data)
+                    return webfunc(url, headers, data=send_data)
         except Exception as e:
             # we dont expect any other error than 401
             if not isinstance(e, WebErr.WebExceptionAuth):

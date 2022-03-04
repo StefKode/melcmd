@@ -16,8 +16,13 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 # 
 #######################################################################################
+import sys
+import os
+from os.path import dirname
+sys.path.append(dirname(__file__) + os.sep + ".." + os.sep + "..")
+
 from factory.default import DefaultFactory
-from config.config_mel import Config
+from config.config_mel import ConfigMel as Config
 
 from util import log
 log.trace_enable = False
@@ -45,5 +50,7 @@ for dev_id in building.device_ids:
     print("    Power  = %s" % str(dev.Power))
     print("   RoomTemp= %f" % dev.RoomTemperature)
     print("    SetTemp= %f" % dev.SetTemperature)
+    dev.Power = False
+    api.apply(dev)
 
 

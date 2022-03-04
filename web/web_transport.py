@@ -28,13 +28,13 @@ class WebTransport:
     """
 
     @staticmethod
-    def post_jsn(url, headers: dict, data: dict) -> dict:
+    def post_jsn(url, headers: dict, data: str) -> dict:
         """
         Perform HTTP POST operation. Any returned data is assumed to be Json and will be
         converted to a dictionary. Any response other Json will return in exception.
         :param url: URL to use
         :param headers: header dict to use
-        :param data: data dict to use
+        :param data: json document
         :return: dict response
         """
         ret_data = None
@@ -49,6 +49,8 @@ class WebTransport:
         if r.status_code == 404:
             raise Error.WebExceptionNotFound
         if r.status_code != 200:
+            print(r.status_code)
+            print(str(r.text))
             raise Error.WebExceptionMisc
 
         try:

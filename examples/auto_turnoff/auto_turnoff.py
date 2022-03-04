@@ -35,7 +35,6 @@ from examples.auto_turnoff.db_writer import DbWriter
 
 ##########################################################################################
 # configuration of the tracking
-RUNTIME_SEC=30*60
 CHECK_TIME_SEC=5*60
 
 DEBUG=True
