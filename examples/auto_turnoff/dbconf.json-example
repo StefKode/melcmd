@@ -4,5 +4,7 @@
   "host": "<host or ip-addr>",
   "port": <int>,
   "db": "<dbname>",
-  "table": "<schema.table>"
+  "table": "<schema.table>",
+  "redis-host": "host-or-ip",
+  "redis-prefix": "some-prefix"
 }

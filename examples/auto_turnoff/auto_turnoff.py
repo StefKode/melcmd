@@ -32,13 +32,15 @@ import time
 from examples.auto_turnoff.tracking_factory import TrackingFactory
 from examples.auto_turnoff.db_config import ConfigDB
 from examples.auto_turnoff.db_writer import DbWriter
+from examples.auto_turnoff.rediscon import RedisCon
 
 ##########################################################################################
 # configuration of the tracking
 CHECK_TIME_SEC=5*60
 
-DEBUG=True
+DEBUG=False
 USE_DB=True
+USE_REDIS=True
 
 
 ##########################################################################################
@@ -66,6 +68,13 @@ if USE_DB:
 else:
     db = None
 
+if USE_REDIS:
+    red = RedisCon(name="acu", host=dbconf.redis_host, log_enabled=DEBUG, trx_log=DEBUG)
+    red.setConMonInterval(5)
+    red.connect()
+else:
+    red = None
+
 
 ##########################################################################################
 # build device manager
@@ -85,5 +94,12 @@ while True:
         dev.evaluate(api, report)
         if USE_DB:
             db.publish(dev.ID, dev.Power, dev.SetTemperature, dev.RoomTemperature)
+        if USE_REDIS:
+            if dev.Power:
+                power_val = 1
+            else:
+                power_val = 0
+            red.set("%s/%d/power"    % (dbconf.redis_prefix, dev.ID), power_val)
+            red.set("%s/%d/setpoint" % (dbconf.redis_prefix, dev.ID), dev.SetTemperature)
     time.sleep(CHECK_TIME_SEC)
 

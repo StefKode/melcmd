@@ -42,3 +42,11 @@ class ConfigDB(ConfigBase):
     @property
     def password(self):
         return self._config['password']
+
+    @property
+    def redis_host(self):
+        return self._config['redis-host']
+
+    @property
+    def redis_prefix(self):
+        return self._config['redis-prefix']
