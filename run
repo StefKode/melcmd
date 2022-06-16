@@ -1,0 +1,9 @@
+#!/bin/bash
+
+while [ 1 ];
+do
+        echo "##############START#######################"
+        python3 examples/auto_turnoff/auto_turnoff.py
+        sleep 30
+done
+

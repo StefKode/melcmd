@@ -39,7 +39,9 @@ class WebTransport:
         """
         ret_data = None
         try:
+            print("request.post-----------")
             r = requests.post(url, headers=headers, data=data)
+            print("request.post-done------")
         except Exception as e:
             #print(e)
             raise Error.WebExceptionConnection
@@ -71,7 +73,9 @@ class WebTransport:
         """
         ret_data = None
         try:
+            print("request.get-----------")
             r = requests.get(url, headers=headers)
+            print("request.get-done------")
         except Exception as e:
             #print(e)
             raise Error.WebExceptionConnection

@@ -38,7 +38,7 @@ from examples.auto_turnoff.rediscon import RedisCon
 # configuration of the tracking
 CHECK_TIME_SEC=5*60
 
-DEBUG=False
+DEBUG=True
 USE_DB=True
 USE_REDIS=True
 

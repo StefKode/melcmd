@@ -6,7 +6,7 @@ from datetime import datetime
 class TrackingDevice(MelDevice):
     _last_ts = None
     _last_power = False
-    _RUNTIME_SEC = 30 * 60
+    _RUNTIME_SEC = 45 * 60
 
     def setRuntime(self, time):
         self._RUNTIME_SEC = time
