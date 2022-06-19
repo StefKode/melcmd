@@ -16,7 +16,7 @@
 #
 #######################################################################################
 from util.log_base import LogBase
-trace_enable = False
+trace_enable = True
 
 class Log(LogBase):
     TRACE = 0
