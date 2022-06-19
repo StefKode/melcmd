@@ -50,3 +50,7 @@ class ConfigDB(ConfigBase):
     @property
     def redis_prefix(self):
         return self._config['redis-prefix']
+
+    @property
+    def redis_aclimit_key(self):
+        return self._config['redis-aclimit-key']

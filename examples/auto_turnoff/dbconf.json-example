@@ -6,5 +6,6 @@
   "db": "<dbname>",
   "table": "<schema.table>",
   "redis-host": "host-or-ip",
-  "redis-prefix": "some-prefix"
+  "redis-prefix": "some-prefix",
+  "redis-aclimit-key": "some-key"
 }

@@ -92,7 +92,7 @@ report("started")
 while True:
     for dev in devMgr.Devices:
         if USE_REDIS:
-            timelimit = bool(red.get("ac_timelimit_enable"))
+            timelimit = bool(red.get(dbconf.redis_aclimit_key))
             dev.evaluate(api, report, timelimit)
         else:
             dev.evaluate(api, report)
