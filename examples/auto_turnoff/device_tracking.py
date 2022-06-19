@@ -40,6 +40,6 @@ class TrackingDevice(MelDevice):
                     self.Power = False
                     api.apply(self)
                     self._last_power = False
-                else:
-                    report("%s timelimit disabled" % self.Name)
+            else:
+                report("%s timelimit disabled" % self.Name)
             return
