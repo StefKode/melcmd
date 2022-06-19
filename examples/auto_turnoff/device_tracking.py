@@ -11,7 +11,7 @@ class TrackingDevice(MelDevice):
     def setRuntime(self, time):
         self._RUNTIME_SEC = time
 
-    def evaluate(self, api: MelAPI, report):
+    def evaluate(self, api: MelAPI, report, timelimit=True):
         api.udpate(self)
         if not self.Power:
             report("%s Room %3.1f°C" % (self.Name, self.RoomTemperature))
@@ -30,12 +30,16 @@ class TrackingDevice(MelDevice):
                                                       self.RoomTemperature,
                                                       round((self._RUNTIME_SEC-duration)/60)))
 
-            if duration > self._RUNTIME_SEC:
-                if self.RoomTemperature < self.SetTemperature:
-                    report("%s timeout but wait for settemp to settle (%3.1f°C)" %
-                           (self.Name, self.SetTemperature - self.RoomTemperature))
-                report("%s turn OFF" % self.Name)
-                self.Power = False
-                api.apply(self)
-                self._last_power = False
+            if timelimit:
+                report("%s timelimit enabled" % self.Name)
+                if duration > self._RUNTIME_SEC:
+                    if self.RoomTemperature < self.SetTemperature:
+                        report("%s timeout but wait for settemp to settle (%3.1f°C)" %
+                               (self.Name, self.SetTemperature - self.RoomTemperature))
+                    report("%s turn OFF" % self.Name)
+                    self.Power = False
+                    api.apply(self)
+                    self._last_power = False
+                else:
+                    report("%s timelimit disabled" % self.Name)
             return

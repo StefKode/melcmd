@@ -91,7 +91,12 @@ print("MONITOR DEVICES")
 report("started")
 while True:
     for dev in devMgr.Devices:
-        dev.evaluate(api, report)
+        if USE_REDIS:
+            timelimit = bool(red.get("ac_timelimit_enable"))
+            dev.evaluate(api, report, timelimit)
+        else:
+            dev.evaluate(api, report)
+
         if USE_DB:
             db.publish(dev.ID, dev.Power, dev.SetTemperature, dev.RoomTemperature)
         if USE_REDIS:
