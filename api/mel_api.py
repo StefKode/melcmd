@@ -22,6 +22,7 @@ from api import mel_api_exceptions as ApiErr
 from api.html_headers import Headers
 from device.mel_device import MelDevice
 import json
+import time
 
 
 class MelAPI(MelAPIBase):
@@ -93,7 +94,15 @@ class MelAPI(MelAPIBase):
         :return: dict response from MelCloud
         """
         self._headers.delete('content-type')
-        return self._web_cmd(self._web.get_jsn, url, self._headers.all)
+        while True:
+            try:
+                data = self._web_cmd(self._web.get_jsn, url, self._headers.all)
+                break
+            except:
+                self._log.print("_web_cmd_get: general failure, retry in 60s")
+                time.sleep(60)
+
+        return data
 
     def _web_cmd(self, webfunc, url, headers, data=None):
         """
